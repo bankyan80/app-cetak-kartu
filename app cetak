@@ -3,450 +3,443 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Kartu Panitia Premium - Mega Mendung Edition</title>
+    <title>Portal Resmi TKA Jenjang SD/MI 2026 | Dinas Pendidikan Kabupaten Cirebon</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #f3f4f6; }
-        
-        .id-card-container {
-            width: 330px;
-            height: 520px;
-            perspective: 1000px;
-        }
-
-        .id-card {
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 2px solid #b59410; }
+        .mega-mendung-bg {
+            background-color: #0c317a;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath fill='%231e40af' fill-opacity='0.4' d='M20 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm60 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm60-40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zM60 10c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10zm80 80c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10-10-4.5-10-10z'/%3E%3C/svg%3E");
             position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
+        .mega-mendung-bg::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, #ffffff, transparent); }
+        .gold-text { color: #d4af37; }
+        .gold-bg { background-color: #d4af37; }
+        .hidden-column { display: none; }
+        
+        .table-theme-header { background: #0c317a; color: #d4af37; }
+        .gel-label-bg { background: #f8fafc; color: #0c317a; font-weight: 800; }
+        th { padding: 12px; text-align: center; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { border: 1px solid #e2e8f0; padding: 10px; font-size: 0.8rem; }
+        .compact-list p { margin-bottom: 2px; }
+        select { cursor: pointer; }
 
-        .mega-mendung-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.25; 
-            pointer-events: none;
-            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH9lSe2AvsUi5HSZgvB2vQAYec19nNLz9jc8GSF7SyLoHx0DBI4OuVX30&s=10");
-            background-repeat: repeat;
-            background-size: 150px auto;
-            mix-blend-mode: soft-light; 
-        }
-
-        /* Tema Warna Jabatan */
-        .theme-korwil { background: #7f1d1d; color: white; } 
-        .theme-pengawas_sekolah { background: #1e3a8a; color: white; } 
-        .theme-verifikator { background: #064e3b; color: white; } 
-        .theme-kepala_sekolah { background: #4338ca; color: white; } 
-        .theme-proktor { background: #0369a1; color: white; } 
-        .theme-teknisi { background: #b45309; color: white; } 
-        .theme-pengawas_ruang { background: #4c1d95; color: white; } 
-
-        /* Frame Foto di Antara Teks */
-        .photo-container {
-            width: 125px;
-            height: 155px;
-            z-index: 20;
-            border-radius: 10px;
-            border: 4px solid white;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            background: #f9fafb;
-            margin: 10px auto; /* Jarak antara teks atas dan foto */
-        }
-
-        .diagonal-box {
-            position: absolute;
-            width: 150%;
-            height: 160px;
-            bottom: -70px;
-            left: -25%;
-            transform: rotate(-6deg);
-            z-index: 5;
-        }
-
-        .event-title-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 38px; 
-            width: 100%;
-            padding: 0 10px;
-            overflow: hidden;
-        }
-
-        #cardEvent {
+        .logo-img {
             display: block;
-            width: 100%;
-            text-align: center;
-            white-space: normal;
-            font-size: 13px; 
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.01em;
+            width: 36px;
+            height: auto;
+            object-fit: contain;
         }
 
-        .name-section {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 20px;
-            z-index: 30;
-            margin-top: 5px;
+        .btn-print {
+            background: linear-gradient(135deg, #0c317a 0%, #1e40af 100%);
+            transition: all 0.3s ease;
         }
-
-        .name-wrapper {
-            width: 100%;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #cardName {
-            font-size: 18px;
-            font-weight: 800;
-            color: #111827;
-            line-height: 1;
-            text-transform: uppercase;
-            white-space: nowrap;
-            display: inline-block;
-            text-align: center;
-            max-width: 290px;
-            transition: font-size 0.05s ease;
-        }
-
-        #cardIDNumber {
-            font-size: 11px;
-            color: #4b5563;
-            font-weight: 700;
-            margin-top: 2px;
-            letter-spacing: 0.05em;
-        }
-
-        /* Penyesuaian Jarak Jabatan */
-        .role-bar-container {
-            width: 85%;
-            margin: 15px auto 20px auto; /* Margin bottom 20px ditambahkan untuk jarak ke footer */
-            z-index: 20;
-        }
-
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; margin: 0; }
-            .id-card-container { margin: 10px; break-inside: avoid; display: inline-block; box-shadow: none; border: 1px solid #eee; }
+        .btn-print:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(12, 49, 122, 0.3);
         }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="bg-[#fafafa] text-slate-900">
 
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
-        
-        <!-- FORM INPUT -->
-        <div class="lg:col-span-1 bg-white p-8 rounded-3xl shadow-2xl no-print h-fit border border-gray-100">
-            <div id="statusMessage" class="hidden mb-4 p-3 bg-blue-100 text-blue-700 rounded-xl text-xs font-bold text-center italic animate-pulse">Sedang memproses file...</div>
-            
-            <h2 class="text-xl font-extrabold mb-8 text-gray-900 flex items-center gap-3 leading-tight">
-                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                ID Card Panitia
-            </h2>
-            
-            <div class="space-y-5">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Instansi / Sekolah</label>
-                    <input type="text" id="inputUnit" placeholder="Lembaga/Sekolah..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none transition-all font-semibold text-gray-700" oninput="updateCard()">
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 glass-nav" id="navbar">
+        <nav class="container mx-auto px-4 lg:px-8 py-2 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-1 rounded-lg shadow-sm border border-slate-100 overflow-hidden flex items-center justify-center" style="width: 44px; height: 44px;">
+                    <img src="https://i.pinimg.com/1200x/76/39/2d/76392d91c9c22d8ec5563b1126cd55b8.jpg" 
+                         alt="Logo Kabupaten Cirebon" 
+                         class="logo-img">
                 </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Kecamatan</label>
-                    <input type="text" id="inputKecamatan" placeholder="Nama kecamatan..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none transition-all font-semibold text-gray-700" oninput="updateCard()">
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-tight text-blue-900 leading-none">Dinas Pendidikan</span>
+                    <span class="text-[9px] font-semibold gold-text uppercase tracking-widest mt-0.5">Kabupaten Cirebon</span>
                 </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Acara</label>
-                    <select id="selectEvent" class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" onchange="toggleCustomEvent()">
-                        <option value="TKA SD/SMP 2026">TKA SD/SMP 2026</option>
-                        <option value="ANBK 2026">ANBK 2026</option>
-                        <option value="Ujian Sekolah 2026">Ujian Sekolah 2026</option>
-                        <option value="custom">-- Kustom Nama Acara --</option>
-                    </select>
-                </div>
-                <div id="customEventWrapper" class="hidden">
-                    <input type="text" id="inputEventCustom" placeholder="Nama acara kustom..." class="w-full p-3.5 bg-blue-50 border-2 border-blue-100 rounded-xl focus:border-blue-500 outline-none font-semibold text-gray-700" oninput="updateCard()">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Lengkap & Gelar</label>
-                    <input type="text" id="inputName" placeholder="Ketikkan nama..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" oninput="updateCard()">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">NIP/NIK/ID</label>
-                    <input type="text" id="inputIDNumber" placeholder="NIP / NIK / ID..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" oninput="updateCard()">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Peran Panitia</label>
-                    <select id="inputRole" class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" onchange="updateCard()">
-                        <option value="korwil">Korwil Kecamatan</option>
-                        <option value="pengawas_sekolah">Pengawas Sekolah</option>
-                        <option value="verifikator">Tim Verifikasi Korwil</option>
-                        <option value="kepala_sekolah">Kepala Sekolah</option>
-                        <option value="proktor" selected>Proktor</option>
-                        <option value="teknisi">Teknisi</option>
-                        <option value="pengawas_ruang">Pengawas Ruang</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Foto Panitia</label>
-                    <input type="file" id="photoInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gray-900 file:text-white hover:file:bg-black cursor-pointer" onchange="handlePhoto(this)">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 mt-4">
-                    <button onclick="downloadImage('front')" class="bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-[10px] flex flex-col items-center gap-1">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        JPG DEPAN
-                    </button>
-                    <button onclick="downloadImage('back')" class="bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-[10px] flex flex-col items-center gap-1">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        JPG BELAKANG
-                    </button>
-                </div>
-
-                <button id="btnPDF" onclick="downloadPDF()" class="w-full bg-blue-600 text-white font-extrabold py-4 rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-sm">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    UNDUH PDF SIAP CETAK
-                </button>
             </div>
-        </div>
+            <ul class="hidden md:flex space-x-6 text-[10px] font-bold uppercase tracking-widest text-slate-600">
+                <li><a href="#beranda" class="hover:text-blue-900 transition border-b-2 border-transparent hover:border-blue-900 pb-1">Beranda</a></li>
+                <li><a href="#jadwal" class="hover:text-blue-900 transition border-b-2 border-transparent hover:border-blue-900 pb-1">Jadwal</a></li>
+                <li><a href="#petugas" class="hover:text-blue-900 transition border-b-2 border-transparent hover:border-blue-900 pb-1">Kepanitiaan</a></li>
+                <li><a href="#pengawas" class="hover:text-blue-900 transition border-b-2 border-transparent hover:border-blue-900 pb-1">Pengawas</a></li>
+                <li><a href="#peserta" class="hover:text-blue-900 transition border-b-2 border-transparent hover:border-blue-900 pb-1">Peserta</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <!-- AREA PRATINJAU -->
-        <div id="previewArea" class="lg:col-span-2 flex flex-col md:flex-row gap-10 justify-center items-start">
+    <!-- Hero -->
+    <section id="beranda" class="mega-mendung-bg pt-32 pb-12 px-4 text-white">
+        <div class="container mx-auto text-center relative z-10">
+            <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight gold-text uppercase">
+                TKA JENJANG SD/MI 2026
+            </h1>
+            <div class="flex justify-center items-baseline space-x-2">
+                <div id="counterPeserta" class="text-xl font-bold gold-text">Memuat data...</div>
+                <span class="text-sm font-bold gold-text uppercase tracking-wide">SISWA</span>
+            </div>
+            <div class="text-[9px] uppercase tracking-[0.3em] opacity-70 font-bold">Total Peserta Terdaftar</div>
+        </div>
+    </section>
+
+    <!-- Jadwal -->
+    <section id="jadwal" class="py-10 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="mb-6 text-center">
+                <span class="gold-text text-[9px] font-black uppercase tracking-[0.4em]">Timeline Utama</span>
+                <h2 class="text-xl font-black text-blue-950 uppercase tracking-tighter mt-1">Jadwal Pelaksanaan</h2>
+            </div>
             
-            <!-- SISI DEPAN -->
-            <div class="flex flex-col items-center gap-4">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] no-print">Sisi Depan</span>
-                <div id="idCardFront" class="id-card-container">
-                    <div class="id-card">
-                        <!-- HEADER SEKSI -->
-                        <div id="headerBg" class="h-[175px] theme-proktor relative flex flex-col items-center pt-5 overflow-hidden">
-                            <div class="mega-mendung-overlay"></div>
-                            <p class="text-[7px] font-normal tracking-[0.3em] relative z-10 uppercase text-white/80 mb-2">DINAS PENDIDIKAN KABUPATEN CIREBON</p>
-                            <div class="relative z-10 flex flex-col items-center w-full px-4 text-white">
-                                <div class="w-12 border-t border-white/30 mb-2"></div>
-                                <p class="text-[9px] font-black tracking-[0.4em] uppercase mb-1">KARTU PANITIA</p>
-                                <div class="text-center w-full flex flex-col items-center">
-                                    <div class="event-title-container">
-                                        <h4 id="cardEvent" class="uppercase">TES KEMAMPUAN AKADEMIK</h4>
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="table-theme-header">
+                            <th class="w-1/4 border-r border-blue-800/50">Gelombang</th>
+                            <th class="w-1/4 border-r border-blue-800/50">Sesi & Waktu</th>
+                            <th class="w-2/4">Mata Uji</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4" class="gel-label-bg text-center align-middle border-r">
+                                <span class="text-[9px] uppercase tracking-widest opacity-60">Gelombang</span>
+                                <div class="text-2xl font-black">1</div>
+                                <div class="text-[9px] mt-1 font-bold text-slate-500 uppercase">20 - 21 April</div>
+                            </td>
+                            <td class="p-2 border-r border-b text-center bg-slate-50/30">
+                                <span class="font-black text-blue-900 text-[9px] block uppercase leading-none mb-1">Sesi 1</span>
+                                <span class="text-[10px] font-semibold text-slate-600">07.30 — 10.30</span>
+                            </td>
+                            <td rowspan="4" class="p-6 align-middle">
+                                <div class="space-y-3">
+                                    <div class="flex items-start">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-blue-900 mt-1.5 mr-2"></div>
+                                        <div>
+                                            <p class="text-[11px] font-black uppercase text-blue-900 leading-none mb-1">Literasi Membaca</p>
+                                            <p class="text-[10px] text-slate-500">75 Menit</p>
+                                        </div>
                                     </div>
-                                    <p id="cardLevel" class="text-[9px] font-bold text-white/95 uppercase tracking-[0.15em] italic mt-0">TAHUN 2026</p>
+                                    <div class="flex items-start">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-blue-900 mt-1.5 mr-2"></div>
+                                        <div>
+                                            <p class="text-[11px] font-black uppercase text-blue-900 leading-none mb-1">Matematika & Numerasi</p>
+                                            <p class="text-[10px] text-slate-500">75 Menit</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 mr-2"></div>
+                                        <div>
+                                            <p class="text-[11px] font-black uppercase text-amber-700 leading-none mb-1">Survei Karakter</p>
+                                            <p class="text-[10px] text-slate-500">30 Menit</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- FOTO PANITIA DI TENGAH -->
-                        <div class="photo-container">
-                            <img id="cardPhoto" src="https://www.w3schools.com/howto/img_avatar.png" class="w-full h-full object-cover" crossorigin="anonymous">
-                        </div>
-
-                        <!-- INFO NAMA & NIP -->
-                        <div class="name-section">
-                            <div class="name-wrapper">
-                                <h2 id="cardName">NAMA LENGKAP & GELAR</h2>
-                            </div>
-                            <p id="cardIDNumber">NIP / NIK / ID</p>
-                        </div>
-
-                        <!-- JABATAN DENGAN JARAK KE FOOTER -->
-                        <div class="role-bar-container">
-                            <div id="roleBar" class="w-full py-2.5 theme-proktor rounded-xl shadow-md border border-white/10 relative overflow-hidden flex flex-col items-center">
-                                <div class="mega-mendung-overlay opacity-40"></div>
-                                <div class="relative z-10">
-                                    <p class="text-[7px] uppercase tracking-[0.3em] font-black opacity-60 mb-0.5 text-center text-white">JABATAN</p>
-                                    <p id="cardRole" class="text-[13px] font-black uppercase tracking-widest text-center text-white">PROKTOR</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- FOOTER SEKSI -->
-                        <div class="h-[95px] relative overflow-hidden flex flex-col items-center justify-end pt-4 pb-3 mt-auto">
-                            <div id="diagonalDecor" class="diagonal-box theme-proktor overflow-hidden">
-                                <div class="mega-mendung-overlay opacity-50"></div>
-                            </div>
-                            <div class="relative z-10 w-full px-4 flex flex-col items-center">
-                                <p id="subTextEvent" class="text-[8px] font-bold text-white opacity-85 uppercase tracking-widest leading-tight text-center w-full mb-0.5">KECAMATAN</p>
-                                <p id="cardUnit" class="text-[9px] font-black text-white uppercase tracking-wider text-center">NAMA SEKOLAH/LEMBAGA</p>
-                                
-                                <div class="mt-2 flex items-center justify-center gap-4">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.2 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/></svg>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 border-r border-b text-center bg-slate-50/30">
+                                <span class="font-black text-blue-900 text-[9px] block uppercase leading-none mb-1">Sesi 2</span>
+                                <span class="text-[10px] font-semibold text-slate-600">10.30 — 13.00</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 border-r border-b text-center bg-slate-50/30">
+                                <span class="font-black text-blue-900 text-[9px] block uppercase leading-none mb-1">Sesi 3</span>
+                                <span class="text-[10px] font-semibold text-slate-600">13.00 — 15.30</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 border-r text-center bg-slate-50/30">
+                                <span class="font-black text-blue-900 text-[9px] block uppercase leading-none mb-1">Sesi 4</span>
+                                <span class="text-[10px] font-semibold text-slate-600">15.30 — 18.00</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- SISI BELAKANG -->
-            <div class="flex flex-col items-center gap-4">
-                <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] no-print">Sisi Belakang</span>
-                <div id="idCardBack" class="id-card-container">
-                    <div class="id-card p-8 flex flex-col border-t-[6px] border-gray-900">
-                        <div class="flex items-center gap-3 mb-6 border-b-2 border-gray-100 pb-3">
-                            <div class="w-2 h-6 bg-gray-900 rounded-full"></div>
-                            <h3 class="font-black text-xs uppercase tracking-widest text-gray-900">Tugas & Tanggung Jawab</h3>
-                        </div>
-                        <div id="backContent" class="text-[10px] text-gray-700 space-y-4 flex-grow font-medium leading-relaxed"></div>
-                        <div class="mt-6 pt-6 border-t border-dashed border-gray-200 flex justify-between items-end">
-                            <div class="space-y-1.5">
-                                <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Ditetapkan Pada:</p>
-                                <p class="text-[10px] font-black text-gray-900 uppercase" id="currentMonthYear">MARET 2026</p>
-                            </div>
-                            <div class="text-right flex flex-col items-center">
-                                <div class="w-14 h-14 border-2 border-gray-100 bg-white flex items-center justify-center rounded-lg p-1">
-                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="#333"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2z"/></svg>
-                                </div>
-                                <p class="text-[7px] font-bold text-gray-400 uppercase mt-1">VERIFIKASI RESMI</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </div>
+    </section>
+
+    <!-- Kepanitiaan -->
+    <section id="petugas" class="py-12 bg-slate-50 border-y border-slate-200">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-8">
+                <span class="gold-text text-[9px] font-black uppercase tracking-[0.3em]">Personalia Pelaksana</span>
+                <h2 class="text-2xl font-black text-blue-950 uppercase tracking-tighter mt-1">Struktur Kepanitiaan</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Kabupaten -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200">
+                    <div class="flex items-center space-x-2 mb-3 border-b pb-2 border-slate-100">
+                        <i data-lucide="shield-check" class="text-blue-900 w-4 h-4"></i>
+                        <h3 class="font-black text-blue-900 text-[10px] uppercase">Kabupaten</h3>
+                    </div>
+                    <div class="space-y-3 compact-list">
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">PJ</p>
+                            <p class="text-[10px] font-bold text-slate-800">Ka. Disdik</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Ketua</p>
+                            <p class="text-[10px] font-bold text-slate-800">Kabid SD</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">IT</p>
+                            <p class="text-[10px] font-bold text-slate-800">Helpdesk Kab.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wilayah -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200">
+                    <div class="flex items-center space-x-2 mb-3 border-b pb-2 border-slate-100">
+                        <i data-lucide="map-pin" class="text-amber-500 w-4 h-4"></i>
+                        <h3 class="font-black text-amber-700 text-[10px] uppercase">Wilayah</h3>
+                    </div>
+                    <div class="space-y-3 compact-list">
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">PJ</p>
+                            <p class="text-[10px] font-bold text-slate-800">Koord. Korwil</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Monev</p>
+                            <p class="text-[10px] font-bold text-slate-800">Pengawas</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">IT</p>
+                            <p class="text-[10px] font-bold text-slate-800">Helpdesk Wil.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sekolah -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200">
+                    <div class="flex items-center space-x-2 mb-3 border-b pb-2 border-slate-100">
+                        <i data-lucide="school" class="text-emerald-600 w-4 h-4"></i>
+                        <h3 class="font-black text-emerald-700 text-[10px] uppercase">Sekolah</h3>
+                    </div>
+                    <div class="space-y-3 compact-list">
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Ketua</p>
+                            <p class="text-[10px] font-bold text-slate-800">Kepala Sekolah</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Teknis</p>
+                            <p class="text-[10px] font-bold text-slate-800">Proktor/Teknisi</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase">Admin</p>
+                            <p class="text-[10px] font-bold text-slate-800">Guru Kelas VI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pendukung -->
+                <div class="bg-blue-950 p-4 rounded-2xl text-white">
+                    <div class="flex items-center space-x-2 mb-3 border-b pb-2 border-white/10">
+                        <i data-lucide="settings-2" class="text-amber-400 w-4 h-4"></i>
+                        <h3 class="font-black gold-text text-[10px] uppercase tracking-wider">Pendukung</h3>
+                    </div>
+                    <div class="space-y-3 compact-list py-1">
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase mb-0.5">Organisasi</p>
+                            <p class="text-[10px] font-bold uppercase">K3S & Komite Sekolah</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase mb-0.5">Operasional</p>
+                            <p class="text-[10px] font-bold">Keamanan & Kebersihan</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-400 uppercase mb-0.5">Logistik</p>
+                            <p class="text-[10px] font-bold">Konsumsi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pengawas Section -->
+    <section id="pengawas" class="py-12 bg-white">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <div class="flex items-center gap-6">
+                    <div>
+                        <h2 class="text-xl font-black text-blue-900 uppercase tracking-tighter">Daftar Pengawas</h2>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Alokasi Petugas Lapangan</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-100 rounded-lg px-3 py-1.5">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Tampil:</span>
+                        <select id="pengawasLimit" onchange="updatePengawasDisplay()" class="bg-transparent border-none text-[11px] font-black text-blue-900 outline-none">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="all">Semua</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative w-full md:w-64">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400"></i>
+                    <input type="text" id="pengawasSearch" placeholder="Cari NIP/Nama..." onkeyup="updatePengawasDisplay()" class="w-full pl-9 pr-4 py-2 bg-slate-100 rounded-xl text-xs outline-none focus:ring-1 focus:ring-blue-900 transition-all">
+                </div>
+            </div>
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-left text-[11px]">
+                    <thead id="pengawasHeader" class="bg-slate-50"></thead>
+                    <tbody id="pengawasBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Peserta Section -->
+    <section id="peserta" class="py-12 bg-slate-50">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <div class="flex items-center gap-6">
+                    <div>
+                        <h2 class="text-xl font-black text-blue-950 uppercase tracking-tighter">Daftar Peserta</h2>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Rincian Per Sekolah</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white shadow-sm rounded-lg px-3 py-1.5 border border-slate-200">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Tampil:</span>
+                        <select id="pesertaLimit" onchange="updatePesertaDisplay()" class="bg-transparent border-none text-[11px] font-black text-blue-950 outline-none">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="all">Semua</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative w-full md:w-64">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-400"></i>
+                    <input type="text" id="pesertaSearch" placeholder="Cari Sekolah..." onkeyup="updatePesertaDisplay()" class="w-full pl-9 pr-4 py-2 bg-white rounded-xl text-xs outline-none shadow-sm focus:ring-1 focus:ring-blue-900 transition-all">
+                </div>
+            </div>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                <table class="w-full text-left text-[11px]">
+                    <thead id="pesertaHeader" class="bg-blue-900 text-white"></thead>
+                    <tbody id="pesertaBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Print Action Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-md mx-auto p-8 rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50/50">
+                <div class="bg-blue-900/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="printer" class="text-blue-900 w-8 h-8"></i>
+                </div>
+                <h3 class="text-lg font-black text-blue-950 uppercase tracking-tight mb-2">Atribut Kepanitiaan</h3>
+                <p class="text-xs text-slate-500 mb-6 font-medium">Klik tombol di bawah untuk mencetak kartu identitas panitia dan petugas lapangan.</p>
+                
+                <!-- Aktifkan tombol dengan navigasi window.open -->
+                <button 
+                    type="button" 
+                    onclick="window.open('https://bankyan80.github.io/Lumina-Generate-Image/', '_blank')"
+                    class="btn-print w-full py-4 px-6 rounded-2xl text-white font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg group"
+                >
+                    <span>Cetak Kartu Panitia</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+                </button>
+                
+                <p class="mt-4 text-[9px] text-slate-400 italic">Terhubung ke Lumina Generate Image</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-950 py-10 text-center border-t border-white/5">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center items-center space-x-3 mb-4">
+                <div class="bg-white p-1 rounded-lg flex items-center justify-center overflow-hidden" style="width: 32px; height: 32px;">
+                    <img src="https://i.pinimg.com/1200x/76/39/2d/76392d91c9c22d8ec5563b1126cd55b8.jpg" 
+                         alt="Logo Kabupaten Cirebon" 
+                         class="w-full h-full object-contain">
+                </div>
+                <span class="text-white font-bold tracking-tighter text-sm uppercase">TKA JENJANG SD/MI 2026</span>
+            </div>
+            <p class="text-[8px] text-slate-400 font-black uppercase tracking-[0.3em] mb-1">Dinas Pendidikan Kabupaten Cirebon</p>
+            <p class="text-[9px] text-slate-300 font-bold tracking-widest uppercase">© 2026 PORTAL INFORMASI TKA SD/MI - LEMAHABANG</p>
+        </div>
+    </footer>
 
     <script>
-        const jobDesks = {
-            korwil: ["<b>Korwil Kecamatan:</b> Bertanggung jawab penuh kelancaran tahapan kegiatan.","Mengoordinasikan sumber daya kebijakan strategis.","Pelaporan akhir kepada Dinas Pendidikan.","Memvalidasi penetapan panitia."],
-            pengawas_sekolah: ["<b>Pengawas Sekolah:</b> Supervisi manajerial dan akademik.","Pembinaan teknis sesuai SOP.","Memastikan integritas pelaksanaan terjaga.","Penghubung komunikasi sekolah & korwil."],
-            verifikator: ["<b>Tim Verifikasi Korwil:</b> Validasi data administrasi sekolah.","Memeriksa kesesuaian berkas fisik & digital.","Rekomendasi perbaikan data.","Menyusun rekapitulasi data verifikasi."],
-            kepala_sekolah: ["<b>Kepala Sekolah:</b> Penanggung jawab tingkat satuan pendidikan.","Mengesahkan rencana kerja panitia lokal.","Menjamin keamanan lingkungan & perangkat.","Keputusan final kendala di sekolah."],
-            proktor: ["<b>Proktor:</b> Mengoperasikan aplikasi ujian & server.","Sinkronisasi data & unggah token.","Menyelesaikan masalah login peserta.","Mencetak berita acara & daftar hadir."],
-            teknisi: ["<b>Teknisi:</b> Kesiapan hardware, jaringan & listrik.","Perbaikan darurat unit client/server.","Stabilitas koneksi internet.","Pendampingan instalasi sistem."],
-            pengawas_ruang: ["<b>Pengawas Ruang:</b> Pengawasan langsung di ruang ujian.","Verifikasi identitas & kartu login.","Menjaga ketenangan ruang ujian.","Menyerahkan administrasi ruang ke Proktor."]
-        };
+        lucide.createIcons();
+        let allParticipants = [];
+        let participantHeaders = [];
+        let allPengawas = [];
+        let pengawasHeaders = [];
 
-        function adjustFontSize() {
-            const nameEl = document.getElementById('cardName');
-            let fontSize = 18;
-            nameEl.style.fontSize = fontSize + "px";
-            const maxWidth = 290;
-            while (nameEl.offsetWidth > maxWidth && fontSize > 7) {
-                fontSize -= 0.3;
-                nameEl.style.fontSize = fontSize + "px";
-            }
+        const hidePengawas = ["NAMA SEKOLAH", "KECAMATAN", "GELOMBANG", "NIP/NIK", "EMAIL"];
+        const hidePeserta = ["SYNC", "LOG", "STATUS", "LAST UPDATE"];
+        
+        const urlP = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRChbpO3l3-_XMGNtyZqGwNkBeYurPWxC92Ci66Fi4hp6FZ5R5co_AxcvsXAGGU6HzxxVK89SmzH8GW/pub?gid=0&single=true&output=csv";
+        const urlW = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRngw8aAuecFTOlLeM2jaLLZPOmiDWkXpN5XvlRyvsSQ8bVgeuMBIFDSkvgjP0r7wepHloLxB54wF1t/pub?gid=1363498891&single=true&output=csv";
+
+        fetch(urlP).then(r => r.text()).then(d => {
+            const rows = d.split("\n").filter(r => r.trim()).map(r => r.split(","));
+            participantHeaders = rows[0];
+            allParticipants = rows.slice(1);
+            calcTotal();
+            renderHeader("pesertaHeader", participantHeaders, hidePeserta);
+            updatePesertaDisplay();
+        });
+
+        fetch(urlW).then(r => r.text()).then(d => {
+            const rows = d.split("\n").filter(r => r.trim()).map(r => r.split(","));
+            pengawasHeaders = rows[0];
+            allPengawas = rows.slice(1);
+            renderHeader("pengawasHeader", pengawasHeaders, hidePengawas);
+            updatePengawasDisplay();
+        });
+
+        function renderHeader(id, headers, hidden) {
+            document.getElementById(id).innerHTML = "<tr>" + headers.map(h => {
+                const isHidden = hidden.some(p => h.toUpperCase().includes(p));
+                return `<th class="p-3 border-b text-[9px] tracking-wider ${isHidden ? 'hidden-column' : ''}">${h.trim()}</th>`;
+            }).join('') + "</tr>";
         }
 
-        function updateCard() {
-            const unit = document.getElementById('inputUnit').value;
-            const kecamatan = document.getElementById('inputKecamatan').value;
-            const selectEvent = document.getElementById('selectEvent').value;
-            const customEvent = document.getElementById('inputEventCustom').value;
-            const name = document.getElementById('inputName').value;
-            const idNumber = document.getElementById('inputIDNumber').value;
-            const roleKey = document.getElementById('inputRole').value;
+        function calcTotal() {
+            let idx = participantHeaders.findIndex(h => h.toUpperCase().includes("PESERTA"));
+            if (idx === -1) return;
+            let total = allParticipants.reduce((s, r) => s + (parseInt(r[idx]) || 0), 0);
+            document.getElementById("counterPeserta").innerText = new Intl.NumberFormat('id-ID').format(total);
+        }
 
-            const eventNameRaw = selectEvent === 'custom' ? customEvent : selectEvent;
-            let displayTitle = "", levelTitle = "TAHUN 2026", subTitle = "";
+        function updatePengawasDisplay() {
+            const s = document.getElementById("pengawasSearch").value.toLowerCase();
+            const limitVal = document.getElementById("pengawasLimit").value;
+            const limit = limitVal === 'all' ? allPengawas.length : parseInt(limitVal);
             
-            if (eventNameRaw.toUpperCase().includes('TKA')) {
-                displayTitle = "TES KEMAMPUAN AKADEMIK";
-                subTitle = `KORWIL BIDANG PENDIDIKAN KECAMATAN ${kecamatan.toUpperCase() || '...'}`;
-                levelTitle = "JENJANG SD/SMP TAHUN 2026";
-            } else if (eventNameRaw.toUpperCase().includes('ANBK')) {
-                displayTitle = eventNameRaw;
-                levelTitle = "TAHUN PELAJARAN 2025/2026";
-                subTitle = "Asesmen Nasional Berbasis Komputer";
-            } else {
-                displayTitle = eventNameRaw || "NAMA KEGIATAN";
-                levelTitle = "TAHUN 2026";
-                subTitle = kecamatan ? `KECAMATAN ${kecamatan.toUpperCase()}` : "PANITIA KEGIATAN";
-            }
-            
-            document.getElementById('cardLevel').innerText = levelTitle;
-            document.getElementById('subTextEvent').innerText = subTitle;
-            document.getElementById('cardEvent').innerText = displayTitle;
-            document.getElementById('cardUnit').innerText = unit || "NAMA SEKOLAH/LEMBAGA";
-            document.getElementById('cardName').innerText = name || "NAMA LENGKAP & GELAR";
-            document.getElementById('cardIDNumber').innerText = idNumber || "NIP / NIK / ID";
-
-            setTimeout(adjustFontSize, 10);
-
-            const elements = [document.getElementById('headerBg'), document.getElementById('roleBar'), document.getElementById('diagonalDecor')];
-            const themes = ['theme-korwil', 'theme-pengawas_sekolah', 'theme-verifikator', 'theme-kepala_sekolah', 'theme-proktor', 'theme-teknisi', 'theme-pengawas_ruang'];
-            
-            elements.forEach(el => {
-                themes.forEach(t => el.classList.remove(t));
-                el.classList.add(`theme-${roleKey}`);
-            });
-
-            const roleNames = { korwil: "KORWIL KECAMATAN", pengawas_sekolah: "PENGAWAS SEKOLAH", verifikator: "TIM VERIFIKASI KORWIL", kepala_sekolah: "KEPALA SEKOLAH", proktor: "PROKTOR", teknisi: "TEKNISI", pengawas_ruang: "PENGAWAS RUANG" };
-            document.getElementById('cardRole').innerText = roleNames[roleKey];
-
-            const backList = document.getElementById('backContent');
-            backList.innerHTML = '<ul class="space-y-3"></ul>';
-            (jobDesks[roleKey] || jobDesks['korwil']).forEach(text => {
-                const li = document.createElement('li');
-                li.className = "flex items-start gap-2 text-[9px]";
-                li.innerHTML = `<span class="mt-1 text-gray-400">•</span> <span>${text}</span>`;
-                backList.querySelector('ul').appendChild(li);
-            });
+            const filtered = allPengawas.filter(r => r.some(c => c.toLowerCase().includes(s))).slice(0, limit);
+            document.getElementById("pengawasBody").innerHTML = filtered.map(r => 
+                `<tr class="border-b hover:bg-slate-50 transition-colors">${r.map((c, i) => {
+                    const isHidden = hidePengawas.some(p => pengawasHeaders[i].toUpperCase().includes(p));
+                    return `<td class="p-3 ${isHidden ? 'hidden-column' : ''}">${c.trim()}</td>`;
+                }).join('')}</tr>`
+            ).join('');
         }
 
-        async function downloadImage(side) {
-            const status = document.getElementById('statusMessage');
-            const target = side === 'front' ? 'idCardFront' : 'idCardBack';
-            status.classList.remove('hidden');
-            try {
-                const element = document.getElementById(target);
-                const canvas = await html2canvas(element, { scale: 3, useCORS: true });
-                const link = document.createElement('a');
-                link.download = `KARTU_${side.toUpperCase()}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg', 0.95);
-                link.click();
-            } catch (e) { console.error(e); } finally { status.classList.add('hidden'); }
+        function updatePesertaDisplay() {
+            const s = document.getElementById("pesertaSearch").value.toLowerCase();
+            const limitVal = document.getElementById("pesertaLimit").value;
+            const limit = limitVal === 'all' ? allParticipants.length : parseInt(limitVal);
+
+            const filtered = allParticipants.filter(r => r.some(c => c.toLowerCase().includes(s))).slice(0, limit);
+            document.getElementById("pesertaBody").innerHTML = filtered.map(r => 
+                `<tr class="border-b hover:bg-slate-50 transition-colors">${r.map((c, i) => {
+                    const isHidden = hidePeserta.some(p => participantHeaders[i].toUpperCase().includes(p));
+                    return `<td class="p-3 ${isHidden ? 'hidden-column' : ''}">${c.trim()}</td>`;
+                }).join('')}</tr>`
+            ).join('');
         }
-
-        async function downloadPDF() {
-            const status = document.getElementById('statusMessage');
-            status.classList.remove('hidden');
-            try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const canvasFront = await html2canvas(document.getElementById('idCardFront'), { scale: 3, useCORS: true });
-                const canvasBack = await html2canvas(document.getElementById('idCardBack'), { scale: 3, useCORS: true });
-                const cardW = 85, cardH = 135;
-                const x = (pdf.internal.pageSize.getWidth() - cardW) / 2;
-                pdf.addImage(canvasFront.toDataURL('image/jpeg', 1.0), 'JPEG', x, 20, cardW, cardH);
-                pdf.addPage();
-                pdf.addImage(canvasBack.toDataURL('image/jpeg', 1.0), 'JPEG', x, 20, cardW, cardH);
-                pdf.save(`ID_CARD_${document.getElementById('inputName').value || 'PANITIA'}.pdf`);
-            } catch (e) { console.error(e); } finally { status.classList.add('hidden'); }
-        }
-
-        function toggleCustomEvent() {
-            document.getElementById('customEventWrapper').classList.toggle('hidden', document.getElementById('selectEvent').value !== 'custom');
-            updateCard();
-        }
-
-        function handlePhoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => document.getElementById('cardPhoto').src = e.target.result;
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        const months = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
-        document.getElementById('currentMonthYear').innerText = `${months[new Date().getMonth()]} ${new Date().getFullYear()}`;
-
-        window.onload = () => { updateCard(); };
     </script>
 </body>
 </html>
-
