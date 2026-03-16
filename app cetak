@@ -33,15 +33,6 @@
             height: auto;
             object-fit: contain;
         }
-
-        .btn-print {
-            background: linear-gradient(135deg, #0c317a 0%, #1e40af 100%);
-            transition: all 0.3s ease;
-        }
-        .btn-print:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(12, 49, 122, 0.3);
-        }
     </style>
 </head>
 <body class="bg-[#fafafa] text-slate-900">
@@ -246,7 +237,7 @@
                     <div class="space-y-3 compact-list py-1">
                         <div>
                             <p class="text-[8px] font-bold text-slate-400 uppercase mb-0.5">Organisasi</p>
-                            <p class="text-[10px] font-bold uppercase">K3S & Komite Sekolah</p>
+                            <p class="text-[10px] font-bold uppercase tracking-tight">K3S & Komite Sekolah</p>
                         </div>
                         <div>
                             <p class="text-[8px] font-bold text-slate-400 uppercase mb-0.5">Operasional</p>
@@ -328,31 +319,6 @@
         </div>
     </section>
 
-    <!-- Print Action Section -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-4 text-center">
-            <div class="max-w-md mx-auto p-8 rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50/50">
-                <div class="bg-blue-900/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="printer" class="text-blue-900 w-8 h-8"></i>
-                </div>
-                <h3 class="text-lg font-black text-blue-950 uppercase tracking-tight mb-2">Atribut Kepanitiaan</h3>
-                <p class="text-xs text-slate-500 mb-6 font-medium">Klik tombol di bawah untuk mencetak kartu identitas panitia dan petugas lapangan.</p>
-                
-                <!-- Aktifkan tombol dengan navigasi window.open -->
-                <button 
-                    type="button" 
-                    onclick="window.open('https://bankyan80.github.io/Lumina-Generate-Image/', '_blank')"
-                    class="btn-print w-full py-4 px-6 rounded-2xl text-white font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg group"
-                >
-                    <span>Cetak Kartu Panitia</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-                </button>
-                
-                <p class="mt-4 text-[9px] text-slate-400 italic">Terhubung ke Lumina Generate Image</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="bg-blue-950 py-10 text-center border-t border-white/5">
         <div class="container mx-auto px-4">
@@ -400,6 +366,7 @@
         });
 
         function renderHeader(id, headers, hidden) {
+            if (!headers) return;
             document.getElementById(id).innerHTML = "<tr>" + headers.map(h => {
                 const isHidden = hidden.some(p => h.toUpperCase().includes(p));
                 return `<th class="p-3 border-b text-[9px] tracking-wider ${isHidden ? 'hidden-column' : ''}">${h.trim()}</th>`;
