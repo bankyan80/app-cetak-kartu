@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kartu Panitia Premium - Mega Mendung Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #f3f4f6; }
+        
+        .id-card-container {
+            width: 330px;
+            height: 520px;
+            perspective: 1000px;
+        }
+
+        .id-card {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mega-mendung-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.25; 
+            pointer-events: none;
+            background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH9lSe2AvsUi5HSZgvB2vQAYec19nNLz9jc8GSF7SyLoHx0DBI4OuVX30&s=10");
+            background-repeat: repeat;
+            background-size: 150px auto;
+            mix-blend-mode: soft-light; 
+        }
+
+        /* Tema Warna Jabatan */
+        .theme-korwil { background: #7f1d1d; color: white; } 
+        .theme-pengawas_sekolah { background: #1e3a8a; color: white; } 
+        .theme-verifikator { background: #064e3b; color: white; } 
+        .theme-kepala_sekolah { background: #4338ca; color: white; } 
+        .theme-proktor { background: #0369a1; color: white; } 
+        .theme-teknisi { background: #b45309; color: white; } 
+        .theme-pengawas_ruang { background: #4c1d95; color: white; } 
+
+        /* Frame Foto di Antara Teks */
+        .photo-container {
+            width: 125px;
+            height: 155px;
+            z-index: 20;
+            border-radius: 10px;
+            border: 4px solid white;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #f9fafb;
+            margin: 10px auto; /* Jarak antara teks atas dan foto */
+        }
+
+        .diagonal-box {
+            position: absolute;
+            width: 150%;
+            height: 160px;
+            bottom: -70px;
+            left: -25%;
+            transform: rotate(-6deg);
+            z-index: 5;
+        }
+
+        .event-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px; 
+            width: 100%;
+            padding: 0 10px;
+            overflow: hidden;
+        }
+
+        #cardEvent {
+            display: block;
+            width: 100%;
+            text-align: center;
+            white-space: normal;
+            font-size: 13px; 
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .name-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 30;
+            margin-top: 5px;
+        }
+
+        .name-wrapper {
+            width: 100%;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #cardName {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1;
+            text-transform: uppercase;
+            white-space: nowrap;
+            display: inline-block;
+            text-align: center;
+            max-width: 290px;
+            transition: font-size 0.05s ease;
+        }
+
+        #cardIDNumber {
+            font-size: 11px;
+            color: #4b5563;
+            font-weight: 700;
+            margin-top: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        /* Penyesuaian Jarak Jabatan */
+        .role-bar-container {
+            width: 85%;
+            margin: 15px auto 20px auto; /* Margin bottom 20px ditambahkan untuk jarak ke footer */
+            z-index: 20;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; margin: 0; }
+            .id-card-container { margin: 10px; break-inside: avoid; display: inline-block; box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <!-- FORM INPUT -->
+        <div class="lg:col-span-1 bg-white p-8 rounded-3xl shadow-2xl no-print h-fit border border-gray-100">
+            <div id="statusMessage" class="hidden mb-4 p-3 bg-blue-100 text-blue-700 rounded-xl text-xs font-bold text-center italic animate-pulse">Sedang memproses file...</div>
+            
+            <h2 class="text-xl font-extrabold mb-8 text-gray-900 flex items-center gap-3 leading-tight">
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                ID Card Panitia
+            </h2>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Instansi / Sekolah</label>
+                    <input type="text" id="inputUnit" placeholder="Lembaga/Sekolah..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none transition-all font-semibold text-gray-700" oninput="updateCard()">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Kecamatan</label>
+                    <input type="text" id="inputKecamatan" placeholder="Nama kecamatan..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none transition-all font-semibold text-gray-700" oninput="updateCard()">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Acara</label>
+                    <select id="selectEvent" class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" onchange="toggleCustomEvent()">
+                        <option value="TKA SD/SMP 2026">TKA SD/SMP 2026</option>
+                        <option value="ANBK 2026">ANBK 2026</option>
+                        <option value="Ujian Sekolah 2026">Ujian Sekolah 2026</option>
+                        <option value="custom">-- Kustom Nama Acara --</option>
+                    </select>
+                </div>
+                <div id="customEventWrapper" class="hidden">
+                    <input type="text" id="inputEventCustom" placeholder="Nama acara kustom..." class="w-full p-3.5 bg-blue-50 border-2 border-blue-100 rounded-xl focus:border-blue-500 outline-none font-semibold text-gray-700" oninput="updateCard()">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Lengkap & Gelar</label>
+                    <input type="text" id="inputName" placeholder="Ketikkan nama..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" oninput="updateCard()">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">NIP/NIK/ID</label>
+                    <input type="text" id="inputIDNumber" placeholder="NIP / NIK / ID..." class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" oninput="updateCard()">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Peran Panitia</label>
+                    <select id="inputRole" class="w-full p-3.5 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-blue-500 focus:bg-white outline-none font-semibold text-gray-700" onchange="updateCard()">
+                        <option value="korwil">Korwil Kecamatan</option>
+                        <option value="pengawas_sekolah">Pengawas Sekolah</option>
+                        <option value="verifikator">Tim Verifikasi Korwil</option>
+                        <option value="kepala_sekolah">Kepala Sekolah</option>
+                        <option value="proktor" selected>Proktor</option>
+                        <option value="teknisi">Teknisi</option>
+                        <option value="pengawas_ruang">Pengawas Ruang</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Foto Panitia</label>
+                    <input type="file" id="photoInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gray-900 file:text-white hover:file:bg-black cursor-pointer" onchange="handlePhoto(this)">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <button onclick="downloadImage('front')" class="bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-[10px] flex flex-col items-center gap-1">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        JPG DEPAN
+                    </button>
+                    <button onclick="downloadImage('back')" class="bg-gray-800 text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-[10px] flex flex-col items-center gap-1">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        JPG BELAKANG
+                    </button>
+                </div>
+
+                <button id="btnPDF" onclick="downloadPDF()" class="w-full bg-blue-600 text-white font-extrabold py-4 rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3 text-sm">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    UNDUH PDF SIAP CETAK
+                </button>
+            </div>
+        </div>
+
+        <!-- AREA PRATINJAU -->
+        <div id="previewArea" class="lg:col-span-2 flex flex-col md:flex-row gap-10 justify-center items-start">
+            
+            <!-- SISI DEPAN -->
+            <div class="flex flex-col items-center gap-4">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] no-print">Sisi Depan</span>
+                <div id="idCardFront" class="id-card-container">
+                    <div class="id-card">
+                        <!-- HEADER SEKSI -->
+                        <div id="headerBg" class="h-[175px] theme-proktor relative flex flex-col items-center pt-5 overflow-hidden">
+                            <div class="mega-mendung-overlay"></div>
+                            <p class="text-[7px] font-normal tracking-[0.3em] relative z-10 uppercase text-white/80 mb-2">DINAS PENDIDIKAN KABUPATEN CIREBON</p>
+                            <div class="relative z-10 flex flex-col items-center w-full px-4 text-white">
+                                <div class="w-12 border-t border-white/30 mb-2"></div>
+                                <p class="text-[9px] font-black tracking-[0.4em] uppercase mb-1">KARTU PANITIA</p>
+                                <div class="text-center w-full flex flex-col items-center">
+                                    <div class="event-title-container">
+                                        <h4 id="cardEvent" class="uppercase">TES KEMAMPUAN AKADEMIK</h4>
+                                    </div>
+                                    <p id="cardLevel" class="text-[9px] font-bold text-white/95 uppercase tracking-[0.15em] italic mt-0">TAHUN 2026</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FOTO PANITIA DI TENGAH -->
+                        <div class="photo-container">
+                            <img id="cardPhoto" src="https://www.w3schools.com/howto/img_avatar.png" class="w-full h-full object-cover" crossorigin="anonymous">
+                        </div>
+
+                        <!-- INFO NAMA & NIP -->
+                        <div class="name-section">
+                            <div class="name-wrapper">
+                                <h2 id="cardName">NAMA LENGKAP & GELAR</h2>
+                            </div>
+                            <p id="cardIDNumber">NIP / NIK / ID</p>
+                        </div>
+
+                        <!-- JABATAN DENGAN JARAK KE FOOTER -->
+                        <div class="role-bar-container">
+                            <div id="roleBar" class="w-full py-2.5 theme-proktor rounded-xl shadow-md border border-white/10 relative overflow-hidden flex flex-col items-center">
+                                <div class="mega-mendung-overlay opacity-40"></div>
+                                <div class="relative z-10">
+                                    <p class="text-[7px] uppercase tracking-[0.3em] font-black opacity-60 mb-0.5 text-center text-white">JABATAN</p>
+                                    <p id="cardRole" class="text-[13px] font-black uppercase tracking-widest text-center text-white">PROKTOR</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FOOTER SEKSI -->
+                        <div class="h-[95px] relative overflow-hidden flex flex-col items-center justify-end pt-4 pb-3 mt-auto">
+                            <div id="diagonalDecor" class="diagonal-box theme-proktor overflow-hidden">
+                                <div class="mega-mendung-overlay opacity-50"></div>
+                            </div>
+                            <div class="relative z-10 w-full px-4 flex flex-col items-center">
+                                <p id="subTextEvent" class="text-[8px] font-bold text-white opacity-85 uppercase tracking-widest leading-tight text-center w-full mb-0.5">KECAMATAN</p>
+                                <p id="cardUnit" class="text-[9px] font-black text-white uppercase tracking-wider text-center">NAMA SEKOLAH/LEMBAGA</p>
+                                
+                                <div class="mt-2 flex items-center justify-center gap-4">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.2 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/></svg>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SISI BELAKANG -->
+            <div class="flex flex-col items-center gap-4">
+                <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] no-print">Sisi Belakang</span>
+                <div id="idCardBack" class="id-card-container">
+                    <div class="id-card p-8 flex flex-col border-t-[6px] border-gray-900">
+                        <div class="flex items-center gap-3 mb-6 border-b-2 border-gray-100 pb-3">
+                            <div class="w-2 h-6 bg-gray-900 rounded-full"></div>
+                            <h3 class="font-black text-xs uppercase tracking-widest text-gray-900">Tugas & Tanggung Jawab</h3>
+                        </div>
+                        <div id="backContent" class="text-[10px] text-gray-700 space-y-4 flex-grow font-medium leading-relaxed"></div>
+                        <div class="mt-6 pt-6 border-t border-dashed border-gray-200 flex justify-between items-end">
+                            <div class="space-y-1.5">
+                                <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Ditetapkan Pada:</p>
+                                <p class="text-[10px] font-black text-gray-900 uppercase" id="currentMonthYear">MARET 2026</p>
+                            </div>
+                            <div class="text-right flex flex-col items-center">
+                                <div class="w-14 h-14 border-2 border-gray-100 bg-white flex items-center justify-center rounded-lg p-1">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="#333"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2z"/></svg>
+                                </div>
+                                <p class="text-[7px] font-bold text-gray-400 uppercase mt-1">VERIFIKASI RESMI</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const jobDesks = {
+            korwil: ["<b>Korwil Kecamatan:</b> Bertanggung jawab penuh kelancaran tahapan kegiatan.","Mengoordinasikan sumber daya kebijakan strategis.","Pelaporan akhir kepada Dinas Pendidikan.","Memvalidasi penetapan panitia."],
+            pengawas_sekolah: ["<b>Pengawas Sekolah:</b> Supervisi manajerial dan akademik.","Pembinaan teknis sesuai SOP.","Memastikan integritas pelaksanaan terjaga.","Penghubung komunikasi sekolah & korwil."],
+            verifikator: ["<b>Tim Verifikasi Korwil:</b> Validasi data administrasi sekolah.","Memeriksa kesesuaian berkas fisik & digital.","Rekomendasi perbaikan data.","Menyusun rekapitulasi data verifikasi."],
+            kepala_sekolah: ["<b>Kepala Sekolah:</b> Penanggung jawab tingkat satuan pendidikan.","Mengesahkan rencana kerja panitia lokal.","Menjamin keamanan lingkungan & perangkat.","Keputusan final kendala di sekolah."],
+            proktor: ["<b>Proktor:</b> Mengoperasikan aplikasi ujian & server.","Sinkronisasi data & unggah token.","Menyelesaikan masalah login peserta.","Mencetak berita acara & daftar hadir."],
+            teknisi: ["<b>Teknisi:</b> Kesiapan hardware, jaringan & listrik.","Perbaikan darurat unit client/server.","Stabilitas koneksi internet.","Pendampingan instalasi sistem."],
+            pengawas_ruang: ["<b>Pengawas Ruang:</b> Pengawasan langsung di ruang ujian.","Verifikasi identitas & kartu login.","Menjaga ketenangan ruang ujian.","Menyerahkan administrasi ruang ke Proktor."]
+        };
+
+        function adjustFontSize() {
+            const nameEl = document.getElementById('cardName');
+            let fontSize = 18;
+            nameEl.style.fontSize = fontSize + "px";
+            const maxWidth = 290;
+            while (nameEl.offsetWidth > maxWidth && fontSize > 7) {
+                fontSize -= 0.3;
+                nameEl.style.fontSize = fontSize + "px";
+            }
+        }
+
+        function updateCard() {
+            const unit = document.getElementById('inputUnit').value;
+            const kecamatan = document.getElementById('inputKecamatan').value;
+            const selectEvent = document.getElementById('selectEvent').value;
+            const customEvent = document.getElementById('inputEventCustom').value;
+            const name = document.getElementById('inputName').value;
+            const idNumber = document.getElementById('inputIDNumber').value;
+            const roleKey = document.getElementById('inputRole').value;
+
+            const eventNameRaw = selectEvent === 'custom' ? customEvent : selectEvent;
+            let displayTitle = "", levelTitle = "TAHUN 2026", subTitle = "";
+            
+            if (eventNameRaw.toUpperCase().includes('TKA')) {
+                displayTitle = "TES KEMAMPUAN AKADEMIK";
+                subTitle = `KORWIL BIDANG PENDIDIKAN KECAMATAN ${kecamatan.toUpperCase() || '...'}`;
+                levelTitle = "JENJANG SD/SMP TAHUN 2026";
+            } else if (eventNameRaw.toUpperCase().includes('ANBK')) {
+                displayTitle = eventNameRaw;
+                levelTitle = "TAHUN PELAJARAN 2025/2026";
+                subTitle = "Asesmen Nasional Berbasis Komputer";
+            } else {
+                displayTitle = eventNameRaw || "NAMA KEGIATAN";
+                levelTitle = "TAHUN 2026";
+                subTitle = kecamatan ? `KECAMATAN ${kecamatan.toUpperCase()}` : "PANITIA KEGIATAN";
+            }
+            
+            document.getElementById('cardLevel').innerText = levelTitle;
+            document.getElementById('subTextEvent').innerText = subTitle;
+            document.getElementById('cardEvent').innerText = displayTitle;
+            document.getElementById('cardUnit').innerText = unit || "NAMA SEKOLAH/LEMBAGA";
+            document.getElementById('cardName').innerText = name || "NAMA LENGKAP & GELAR";
+            document.getElementById('cardIDNumber').innerText = idNumber || "NIP / NIK / ID";
+
+            setTimeout(adjustFontSize, 10);
+
+            const elements = [document.getElementById('headerBg'), document.getElementById('roleBar'), document.getElementById('diagonalDecor')];
+            const themes = ['theme-korwil', 'theme-pengawas_sekolah', 'theme-verifikator', 'theme-kepala_sekolah', 'theme-proktor', 'theme-teknisi', 'theme-pengawas_ruang'];
+            
+            elements.forEach(el => {
+                themes.forEach(t => el.classList.remove(t));
+                el.classList.add(`theme-${roleKey}`);
+            });
+
+            const roleNames = { korwil: "KORWIL KECAMATAN", pengawas_sekolah: "PENGAWAS SEKOLAH", verifikator: "TIM VERIFIKASI KORWIL", kepala_sekolah: "KEPALA SEKOLAH", proktor: "PROKTOR", teknisi: "TEKNISI", pengawas_ruang: "PENGAWAS RUANG" };
+            document.getElementById('cardRole').innerText = roleNames[roleKey];
+
+            const backList = document.getElementById('backContent');
+            backList.innerHTML = '<ul class="space-y-3"></ul>';
+            (jobDesks[roleKey] || jobDesks['korwil']).forEach(text => {
+                const li = document.createElement('li');
+                li.className = "flex items-start gap-2 text-[9px]";
+                li.innerHTML = `<span class="mt-1 text-gray-400">•</span> <span>${text}</span>`;
+                backList.querySelector('ul').appendChild(li);
+            });
+        }
+
+        async function downloadImage(side) {
+            const status = document.getElementById('statusMessage');
+            const target = side === 'front' ? 'idCardFront' : 'idCardBack';
+            status.classList.remove('hidden');
+            try {
+                const element = document.getElementById(target);
+                const canvas = await html2canvas(element, { scale: 3, useCORS: true });
+                const link = document.createElement('a');
+                link.download = `KARTU_${side.toUpperCase()}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.click();
+            } catch (e) { console.error(e); } finally { status.classList.add('hidden'); }
+        }
+
+        async function downloadPDF() {
+            const status = document.getElementById('statusMessage');
+            status.classList.remove('hidden');
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const canvasFront = await html2canvas(document.getElementById('idCardFront'), { scale: 3, useCORS: true });
+                const canvasBack = await html2canvas(document.getElementById('idCardBack'), { scale: 3, useCORS: true });
+                const cardW = 85, cardH = 135;
+                const x = (pdf.internal.pageSize.getWidth() - cardW) / 2;
+                pdf.addImage(canvasFront.toDataURL('image/jpeg', 1.0), 'JPEG', x, 20, cardW, cardH);
+                pdf.addPage();
+                pdf.addImage(canvasBack.toDataURL('image/jpeg', 1.0), 'JPEG', x, 20, cardW, cardH);
+                pdf.save(`ID_CARD_${document.getElementById('inputName').value || 'PANITIA'}.pdf`);
+            } catch (e) { console.error(e); } finally { status.classList.add('hidden'); }
+        }
+
+        function toggleCustomEvent() {
+            document.getElementById('customEventWrapper').classList.toggle('hidden', document.getElementById('selectEvent').value !== 'custom');
+            updateCard();
+        }
+
+        function handlePhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => document.getElementById('cardPhoto').src = e.target.result;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        const months = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+        document.getElementById('currentMonthYear').innerText = `${months[new Date().getMonth()]} ${new Date().getFullYear()}`;
+
+        window.onload = () => { updateCard(); };
+    </script>
+</body>
+</html>
+
